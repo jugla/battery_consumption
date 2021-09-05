@@ -199,6 +199,9 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
     @callback
     def _async_battery_consumption_sensor_state_listener(self, event):
         """Handle sensor state changes."""
+        new_state_valid = False
+        value = None
+        #retrieve state
         new_state = event.data.get("new_state")
         if new_state is None:
             return
@@ -210,10 +213,11 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
                 value = (
                     None if new_state.state == STATE_UNKNOWN else float(new_state.state)
                 )
-            self._compute_new_state_and_attribute(value)
+            if value != None:
+                new_state_valid = True
 
         except (ValueError, TypeError):
-            self._state = None
+            #self._state = None
             if self._source_attribute:
                 _LOGGER.warning(
                     "%s attribute %s is not numerical",
@@ -223,4 +227,6 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
             else:
                 _LOGGER.warning("%s state is not numerical", self._source_entity_id)
 
-        self.async_write_ha_state()
+        if new_state_valid == True:
+            self._compute_new_state_and_attribute(value)
+            self.async_write_ha_state()
