@@ -69,6 +69,19 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     )
 
 
+def format_receive_value (value):
+    if value == None or value == STATE_UNKNOWN:
+       return None
+    else:
+       return float (value)
+
+def format_receive_value_zero (value):
+    if value == None or value == STATE_UNKNOWN:
+       return float (0.0)
+    else:
+       return float (value)
+
+
 class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
     """Representation of a BatteryConsumptionSensor."""
 
@@ -94,10 +107,9 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
         #state values
         self._state = None
         self._previous_state = None
-        self._delta = 0
-        self._cumulative_charge = 0
-        self._cumulative_discharge = 0
-
+        self._delta = 0.0
+        self._cumulative_charge = 0.0
+        self._cumulative_discharge = 0.0
 
     async def async_added_to_hass(self):
         """Handle added to Hass."""
@@ -105,11 +117,11 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
         await super().async_added_to_hass()
         state_recorded = await self.async_get_last_state()
         if state_recorded:
-            self._state = state_recorded.state
-            self._previous_state = state_recorded.attributes.get(ATTR_PREVIOUS_MONITORED_VALUE)
-            self._delta = state_recorded.attributes.get(ATTR_CURRENT_VARIATION)
-            self._cumulative_charge = state_recorded.attributes.get(ATTR_TOTAL_CHARGE)
-            self._cumulative_discharge = state_recorded.attributes.get(ATTR_TOTAL_DISCHARGE)
+            self._state = format_receive_value(state_recorded.state)
+            self._previous_state = format_receive_value(state_recorded.attributes.get(ATTR_PREVIOUS_MONITORED_VALUE))
+            self._delta = format_receive_value_zero(state_recorded.attributes.get(ATTR_CURRENT_VARIATION))
+            self._cumulative_charge = format_receive_value_zero(state_recorded.attributes.get(ATTR_TOTAL_CHARGE))
+            self._cumulative_discharge = format_receive_value_zero(state_recorded.attributes.get(ATTR_TOTAL_DISCHARGE))
 
         #listen to source ID
         self.async_on_remove(
@@ -187,8 +199,14 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
         """Compute new state of the sensor and its attribute"""
         self._previous_state = self._state
         self._state = round(value, self._precision)
-        if self._previous_state != None and self._state != None:
-            self._delta = self._state  - self._previous_state
+        if (self._previous_state != None and self._state != None
+            and  self._previous_state != STATE_UNKNOWN and self._state != STATE_UNKNOWN):
+            try:
+               self._delta = self._state  - self._previous_state
+            except:
+               self._delta = 0
+               _LOGGER.warning("%s state or %s previous is not numerical",self._state,self._previous_state)
+
             if self._delta < 0:
                 self._cumulative_discharge = self._cumulative_discharge - self._delta
             else:
