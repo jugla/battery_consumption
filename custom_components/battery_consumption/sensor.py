@@ -70,12 +70,14 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 
 def format_receive_value (value):
+    """format if pb then return None"""
     if value == None or value == STATE_UNKNOWN:
        return None
     else:
        return float (value)
 
 def format_receive_value_zero (value):
+    """format if pb then return 0.0"""
     if value == None or value == STATE_UNKNOWN:
        return float (0.0)
     else:
