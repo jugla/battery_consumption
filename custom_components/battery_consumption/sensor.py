@@ -2,7 +2,6 @@
 import logging
 
 from homeassistant.components.sensor import SensorEntity
-from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.const import (
     ATTR_UNIT_OF_MEASUREMENT,
     CONF_ATTRIBUTE,
@@ -13,6 +12,7 @@ from homeassistant.const import (
 )
 from homeassistant.core import callback
 from homeassistant.helpers.event import async_track_state_change_event
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import (
     CONF_BATTERY_CAPACITY,
@@ -45,7 +45,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     if discovery_info is None:
         return
 
-    battery_consumption = discovery_info[CONF_BATTERY_CONSUMPTION ]
+    battery_consumption = discovery_info[CONF_BATTERY_CONSUMPTION]
     conf = hass.data[DATA_BATTERY_CONSUMPTION][battery_consumption]
 
     source = conf[CONF_SOURCE]
@@ -69,19 +69,20 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     )
 
 
-def format_receive_value (value):
+def format_receive_value(value):
     """format if pb then return None"""
     if value == None or value == STATE_UNKNOWN:
-       return None
+        return None
     else:
-       return float (value)
+        return float(value)
 
-def format_receive_value_zero (value):
+
+def format_receive_value_zero(value):
     """format if pb then return 0.0"""
     if value == None or value == STATE_UNKNOWN:
-       return float (0.0)
+        return float(0.0)
     else:
-       return float (value)
+        return float(value)
 
 
 class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
@@ -106,7 +107,7 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
         self._battery_capacity = battery_capacity
         self._unit_of_measurement = unit_of_measurement
 
-        #state values
+        # state values
         self._state = None
         self._previous_state = None
         self._delta = 0.0
@@ -115,17 +116,25 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
 
     async def async_added_to_hass(self):
         """Handle added to Hass."""
-        #restore from previous run
+        # restore from previous run
         await super().async_added_to_hass()
         state_recorded = await self.async_get_last_state()
         if state_recorded:
             self._state = format_receive_value(state_recorded.state)
-            self._previous_state = format_receive_value(state_recorded.attributes.get(ATTR_PREVIOUS_MONITORED_VALUE))
-            self._delta = format_receive_value_zero(state_recorded.attributes.get(ATTR_CURRENT_VARIATION))
-            self._cumulative_charge = format_receive_value_zero(state_recorded.attributes.get(ATTR_TOTAL_CHARGE))
-            self._cumulative_discharge = format_receive_value_zero(state_recorded.attributes.get(ATTR_TOTAL_DISCHARGE))
+            self._previous_state = format_receive_value(
+                state_recorded.attributes.get(ATTR_PREVIOUS_MONITORED_VALUE)
+            )
+            self._delta = format_receive_value_zero(
+                state_recorded.attributes.get(ATTR_CURRENT_VARIATION)
+            )
+            self._cumulative_charge = format_receive_value_zero(
+                state_recorded.attributes.get(ATTR_TOTAL_CHARGE)
+            )
+            self._cumulative_discharge = format_receive_value_zero(
+                state_recorded.attributes.get(ATTR_TOTAL_DISCHARGE)
+            )
 
-        #listen to source ID
+        # listen to source ID
         self.async_on_remove(
             async_track_state_change_event(
                 self.hass,
@@ -162,66 +171,80 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
         }
         if self._source_attribute:
             ret[ATTR_SOURCE_ATTRIBUTE] = self._source_attribute
-        ret [ATTR_PREVIOUS_MONITORED_VALUE] = self._previous_state
+        ret[ATTR_PREVIOUS_MONITORED_VALUE] = self._previous_state
 
-        ret [ATTR_CURRENT_VARIATION] = self._delta
+        ret[ATTR_CURRENT_VARIATION] = self._delta
         if self._delta < 0:
-            ret [ATTR_CURRENT_CHARGE] = 0
-            ret [ATTR_CURRENT_DISCHARGE] = -self._delta
+            ret[ATTR_CURRENT_CHARGE] = 0
+            ret[ATTR_CURRENT_DISCHARGE] = -self._delta
         else:
-            ret [ATTR_CURRENT_CHARGE] = self._delta
-            ret [ATTR_CURRENT_DISCHARGE] = 0
+            ret[ATTR_CURRENT_CHARGE] = self._delta
+            ret[ATTR_CURRENT_DISCHARGE] = 0
 
-        ret [ATTR_TOTAL_CHARGE] =  self._cumulative_charge
-        ret [ATTR_TOTAL_DISCHARGE] = self._cumulative_discharge
+        ret[ATTR_TOTAL_CHARGE] = self._cumulative_charge
+        ret[ATTR_TOTAL_DISCHARGE] = self._cumulative_discharge
 
         if self._battery_capacity != None:
-           ret [ATTR_CAPACITY] =  self._battery_capacity
-           ret [ATTR_CAPACITY_UNIT] = self._unit_of_measurement
-           if self._delta < 0:
-              ret [ATTR_CURRENT_CHARGE_ENERGY] = 0
-              ret [ATTR_CURRENT_DISCHARGE_ENERGY] = -self._delta * self._battery_capacity / 100
-           else:
-              ret [ATTR_CURRENT_CHARGE_ENERGY] = self._delta * self._battery_capacity / 100
-              ret [ATTR_CURRENT_DISCHARGE_ENERGY] = 0
+            ret[ATTR_CAPACITY] = self._battery_capacity
+            ret[ATTR_CAPACITY_UNIT] = self._unit_of_measurement
+            if self._delta < 0:
+                ret[ATTR_CURRENT_CHARGE_ENERGY] = 0
+                ret[ATTR_CURRENT_DISCHARGE_ENERGY] = (
+                    -self._delta * self._battery_capacity / 100
+                )
+            else:
+                ret[ATTR_CURRENT_CHARGE_ENERGY] = (
+                    self._delta * self._battery_capacity / 100
+                )
+                ret[ATTR_CURRENT_DISCHARGE_ENERGY] = 0
 
-           ret [ATTR_TOTAL_CHARGE_ENERGY] =  self._cumulative_charge * self._battery_capacity / 100
-           ret [ATTR_TOTAL_DISCHARGE_ENERGY] = self._cumulative_discharge * self._battery_capacity / 100
+            ret[ATTR_TOTAL_CHARGE_ENERGY] = (
+                self._cumulative_charge * self._battery_capacity / 100
+            )
+            ret[ATTR_TOTAL_DISCHARGE_ENERGY] = (
+                self._cumulative_discharge * self._battery_capacity / 100
+            )
 
         return ret
-
 
     @property
     def unit_of_measurement(self):
         """Return the unit the value is expressed in."""
         return "%"
 
-
     def _compute_new_state_and_attribute(self, value):
         """Compute new state of the sensor and its attribute"""
         self._previous_state = self._state
         self._state = round(value, self._precision)
-        if (self._previous_state != None and self._state != None
-            and  self._previous_state != STATE_UNKNOWN and self._state != STATE_UNKNOWN):
+        if (
+            self._previous_state != None
+            and self._state != None
+            and self._previous_state != STATE_UNKNOWN
+            and self._state != STATE_UNKNOWN
+        ):
             try:
-               self._delta = self._state  - self._previous_state
+                self._delta = self._state - self._previous_state
             except:
-               self._delta = 0
-               _LOGGER.warning("%s state or %s previous is not numerical",self._state,self._previous_state)
+                self._delta = 0
+                _LOGGER.warning(
+                    "%s state or %s previous is not numerical",
+                    self._state,
+                    self._previous_state,
+                )
 
             if self._delta < 0:
                 self._cumulative_discharge = self._cumulative_discharge - self._delta
             else:
                 self._cumulative_charge = self._cumulative_charge + self._delta
         else:
-          self._delta = 0
+            self._delta = 0
 
     @callback
     def _async_battery_consumption_sensor_state_listener(self, event):
         """Handle sensor state changes."""
         new_state_valid = False
         value = None
-        #retrieve state
+        # retrieve state
         new_state = event.data.get("new_state")
         if new_state is None:
             return
@@ -237,7 +260,7 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
                 new_state_valid = True
 
         except (ValueError, TypeError):
-            #self._state = None
+            # self._state = None
             if self._source_attribute:
                 _LOGGER.warning(
                     "%s attribute %s is not numerical",
