@@ -2,9 +2,8 @@
 import logging
 import warnings
 
-#import numpy as np
+# import numpy as np
 import voluptuous as vol
-
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.const import (
     CONF_ATTRIBUTE,
@@ -16,8 +15,8 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.discovery import async_load_platform
 
 from .const import (
-    CONF_BATTERY_CONSUMPTION,
     CONF_BATTERY_CAPACITY,
+    CONF_BATTERY_CONSUMPTION,
     CONF_PRECISION,
     DATA_BATTERY_CONSUMPTION,
     DEFAULT_PRECISION,
@@ -27,23 +26,21 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-BATTERY_CONSUMPTION_SCHEMA =  vol.Schema(
+BATTERY_CONSUMPTION_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_SOURCE): cv.entity_id,
         vol.Optional(CONF_UNIQUE_ID): cv.string,
         vol.Optional(CONF_ATTRIBUTE): cv.string,
         vol.Optional(CONF_PRECISION, default=DEFAULT_PRECISION): cv.positive_int,
         vol.Optional(CONF_UNIT_OF_MEASUREMENT): cv.string,
-        vol.Optional(CONF_BATTERY_CAPACITY, default=DEFAULT_PRECISION): cv.positive_float,
+        vol.Optional(
+            CONF_BATTERY_CAPACITY, default=DEFAULT_PRECISION
+        ): cv.positive_float,
     }
 )
 
 CONFIG_SCHEMA = vol.Schema(
-    {
-        DOMAIN: vol.Schema(
-            {cv.slug: BATTERY_CONSUMPTION_SCHEMA}
-        )
-    },
+    {DOMAIN: vol.Schema({cv.slug: BATTERY_CONSUMPTION_SCHEMA})},
     extra=vol.ALLOW_EXTRA,
 )
 
@@ -55,9 +52,7 @@ async def async_setup(hass, config):
     for battery_consumption, conf in config.get(DOMAIN).items():
         _LOGGER.debug("Setup %s.%s", DOMAIN, battery_consumption)
 
-        data = {
-                k: v for k, v in conf.items()
-        }
+        data = {k: v for k, v in conf.items()}
 
         hass.data[DATA_BATTERY_CONSUMPTION][battery_consumption] = data
 
@@ -70,6 +65,5 @@ async def async_setup(hass, config):
                 config,
             )
         )
-
 
     return True
