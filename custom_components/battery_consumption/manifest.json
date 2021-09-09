@@ -1,7 +1,7 @@
 {
   "domain": "battery_consumption",
   "name": "battery_consumption",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "codeowners": ["@jugla"],
   "documentation": "https://github.com/jugla/battery_consumption",
   "issue_tracker": "https://github.com/jugla/battery_consumption/issues",
