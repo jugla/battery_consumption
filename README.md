@@ -48,11 +48,11 @@ in configuration.yaml, declare :
 battery_consumption:
     zoe:
        source: sensor.battery_level
+#      attribute : attribute of source to monitor
+#      unique_id : to set a unique id to this sensor
+#      precision : the precision of state
        unit_of_measurement: kWh
        battery_capacity: 41
-#      unique_id : to set a unique id to this sensor
-#      attribute : attribute of source to monitor
-#      precision : the precision of state
     galaxy_s7:
        source: sensor.sm_g930f_niveau_de_batterie
        unit_of_measurement: Wh
