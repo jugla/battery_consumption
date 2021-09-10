@@ -73,25 +73,28 @@ Only source is required
 
 ## Sensor and attribute
 For each battery to monitor one sensor is created.
-The sensor state reprensents the current value of battery to minitor.
+| sensor name | support | unit | Description |
+| ---------------|---------|-------|------------------------------------------|
+| battery_consumption+*name of sensor to minotor* | V1.0.0 | % | the current value of battery to monitor | 
+
 
 The sensor is created with the following attribute :
 
-| Attribute name | support | present | Description |
-| ---------------|---------|-------|------------------------------------------|
-| Source | V1.0.0 | always | the name of battery to monitor | 
-| Previous value | V1.0.0 |  always | the previous value of battery to monitor |
-| Variation | V1.0.0 |  always | the difference between current and previous value |
-| Battery charge | V1.0.0 |  always | the difference between current and previous value if positive (battery is charging) |
-| Battery discharge | V1.0.0 |  always | the difference between current and previous value if negative (battery is discharging) |
-| Total charge | V1.0.0 |  always | the sum of all *battery charge* since the beginning | 
-| Total discharge | V1.0.0 |  always | the sum of all *battery discharge* since the beginning |
-| Capacity | V1.0.0 |  if capacity given | the capacity of the battery cf. yaml |
-| Capacity unit | V1.0.0 |  if capacity given | the unif of the capacity of the battery cf. yaml |
-| Energy charge | V1.0.0 |  if capacity given | the *battery charge* convert in energy |
-| Energy discharge | V1.0.0 |  if capacity given | the *battery discharge* convert in energy |
-| Total energy charge | V1.0.0 |  if capacity given | the *total battery charge* convert in energy |
-| Total energy discharge | V1.0.0 |  if capacity given | the *total battery discharge* convert in energy |
+| Attribute name | support | present | unit | Description |
+| ---------------|---------|-------|------|------------------------------------|
+| Source | V1.0.0 | always | string | the name of battery to monitor | 
+| Previous value | V1.0.0 |  always | % | the previous value of battery to monitor |
+| Variation | V1.0.0 |  always | % | the difference between current and previous value |
+| Battery charge | V1.0.0 |  always | % | the difference between current and previous value if positive (battery is charging) |
+| Battery discharge | V1.0.0 |  always | % | the difference between current and previous value if negative (battery is discharging) |
+| Total charge | V1.0.0 |  always | % | the sum of all *battery charge* since the beginning | 
+| Total discharge | V1.0.0 |  always | % | the sum of all *battery discharge* since the beginning |
+| Capacity | V1.0.0 |  if capacity given  | kWh , Wh, ...  | the capacity of the battery cf. yaml |
+| Capacity unit | V1.0.0 |  if capacity given | kWh , Wh, ... | the unif of the capacity of the battery cf. yaml |
+| Energy charge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *battery charge* convert in energy |
+| Energy discharge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *battery discharge* convert in energy |
+| Total energy charge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *total battery charge* convert in energy |
+| Total energy discharge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *total battery discharge* convert in energy |
 
 ## Typical use
 Typical use is to follow the consumption of battery thanks to utility meter
