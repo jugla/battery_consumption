@@ -71,3 +71,80 @@ Only source is required
 
 </details>
 
+## Sensor and attribute
+For each battery to monitor one sensor is created.
+The sensor state reprensents the current value of battery to minitor.
+
+The sensor is created with the following attribute :
+
+| Attribute name | support | present | Description |
+| ---------------|---------|-------|------------------------------------------|
+| Source | V1.0.0 | always | the name of battery to monitor | 
+| Previous value | V1.0.0 |  always | the previous value of battery to monitor |
+| Variation | V1.0.0 |  always | the difference between current and previous value |
+| Battery charge | V1.0.0 |  always | the difference between current and previous value if positive (battery is charging) |
+| Battery discharge | V1.0.0 |  always | the difference between current and previous value if negative (battery is discharging) |
+| Total charge | V1.0.0 |  always | the sum of all *battery charge* since the beginning | 
+| Total discharge | V1.0.0 |  always | the sum of all *battery discharge* since the beginning |
+| Capacity | V1.0.0 |  if capacity given | the capacity of the battery cf. yaml |
+| Capacity unit | V1.0.0 |  if capacity given | the unif of the capacity of the battery cf. yaml |
+| Energy charge | V1.0.0 |  if capacity given | the *battery charge* convert in energy |
+| Energy discharge | V1.0.0 |  if capacity given | the *battery discharge* convert in energy |
+| Total energy charge | V1.0.0 |  if capacity given | the *total battery charge* convert in energy |
+| Total energy discharge | V1.0.0 |  if capacity given | the *total battery discharge* convert in energy |
+
+## Typical use
+Typical use is to follow the consumption of battery thanks to utility meter
+
+```yaml
+##configuration.yaml example
+template:
+  - sensor:
+      - name: zoe_batterie_total_charge
+        state: "{{ state_attr('sensor.battery_consumption_sensor_battery_level', 'total_energy_charge') }}"
+        unit_of_measurement: 'kWh'
+        device_class: energy
+        state_class: measurement
+
+  - sensor:
+      - name: zoe_batterie_total_discharge
+        state: "{{ state_attr('sensor.battery_consumption_sensor_battery_level', 'total_energy_discharge') }}"
+        unit_of_measurement: 'kWh'
+        device_class: energy
+        state_class: measurement
+
+## UTILITY METER
+utility_meter:
+  zoe_batterie_total_charge_daily:
+   source: sensor.zoe_batterie_total_charge
+   cycle : daily
+  zoe_batterie_total_charge_weekly:
+   source: sensor.zoe_batterie_total_charge
+   cycle : weekly
+  zoe_batterie_total_charge_monthly:
+   source: sensor.zoe_batterie_total_charge
+   cycle : monthly
+
+  zoe_batterie_total_discharge_daily:
+   source: sensor.zoe_batterie_total_discharge
+   cycle : daily
+  zoe_batterie_total_discharge_weekly:
+   source: sensor.zoe_batterie_total_discharge
+   cycle : weekly
+  zoe_batterie_total_discharge_monthly:
+   source: sensor.zoe_batterie_total_discharge
+   cycle : monthly
+``` 
+
+Another typical use is to follow the variation of battery in statistics graph .
+```yaml
+##configuration.yaml example
+template:
+  - sensor:
+      - name: zoe_batterie_variation
+        state: "{{ state_attr('sensor.battery_consumption_sensor_battery_level', 'variation') }}"
+        unit_of_measurement: '%'
+        device_class: battery
+        state_class: measurement
+``` 
+
