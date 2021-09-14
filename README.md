@@ -67,7 +67,7 @@ where :
 - battery_capacity is the capacity of the monitored battery
 - unit_of_measurement is the unit of capacity : kWh, Wh, ...
 
-Only source is required
+*Only source* item is required
 
 </details>
 
