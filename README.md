@@ -35,10 +35,8 @@ folder where your `configuration.yaml` file is, create it and place the director
 1. restart HomeAssistant
 </details>
 
-# Breaking change
-<details><summary>detail description</summary>
-N/A
-</details>
+## Breaking change
+None
 
 ## Using the component
 in configuration.yaml, declare :
