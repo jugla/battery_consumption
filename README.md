@@ -1,5 +1,9 @@
 # battery_consumption
 
+<p align="center">
+  <img src="https://github.com/home-assistant/brands/blob/master/custom_integrations/battery_consumption/icon%402x.png" alt="icon battery consumtion" width="400">
+</p>
+
 Battery Consumption custom component for [Home Assistant](https://home-assistant.io/).
 
 
