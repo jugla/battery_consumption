@@ -135,13 +135,12 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
             )
 
         # listen to source ID
-        self.async_on_remove(
-            async_track_state_change_event(
-                self.hass,
-                [self._source_entity_id],
-                self._async_battery_consumption_sensor_state_listener,
-            )
+        async_track_state_change_event(
+            self.hass,
+            [self._source_entity_id],
+            self._async_battery_consumption_sensor_state_listener,
         )
+
 
     @property
     def unique_id(self):
