@@ -19,4 +19,4 @@ This component allows to :
 The refresh rate is based on battery's level state
 
 ## Other information
-Detail information on use, breaking change, example are given at [worldtidesinfocustom repository](https://github.com/jugla/worldtidesinfocustom)
+Detail information on use, breaking change, example are given at [worldtidesinfocustom repository](https://github.com/jugla/battery_consumption)
