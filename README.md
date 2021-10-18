@@ -22,7 +22,7 @@ The refresh rate is based on battery's level state
 
 ## Installation
 Either use HACS (default), either manual
-### [HACS](https://hacs.xyz/) (Home Assistant Community Store)   {REQUEST ON PROCESS}
+### [HACS](https://hacs.xyz/) (Home Assistant Community Store)
 1. Go to HACS page on your Home Assistant instance 
 1. Select `integration` 
 1. Press add icon and search for `battery_consumption` 
@@ -76,7 +76,7 @@ where :
 For each battery to monitor one sensor is created.
 | sensor name | support | unit | Description |
 | ---------------|---------|-------|------------------------------------------|
-| battery_consumption+*name of sensor to minotor* | V1.0.0 | % | the current value of battery to monitor | 
+| battery_consumption+*name of sensor to monitor* | V1.0.0 | % | the current value of battery to monitor |
 
 
 The sensor is created with the following attribute :
