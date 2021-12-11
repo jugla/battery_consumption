@@ -12,8 +12,8 @@ Battery Consumption custom component for [Home Assistant](https://home-assistant
 
 This component is used to compute statistics on a battery (based on its level state)
 
-This component allows to :
-- to display the current varation of battery
+This component allows to display :
+- the current varation of battery
 - the charge in % or in Wh/kWh...
 - the discharge in % or in Wh/kWh ...
 - the total charge/discharge
