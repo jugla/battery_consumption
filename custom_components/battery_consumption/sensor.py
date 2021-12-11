@@ -8,6 +8,7 @@ from homeassistant.const import (
     CONF_SOURCE,
     CONF_UNIQUE_ID,
     CONF_UNIT_OF_MEASUREMENT,
+    STATE_UNAVAILABLE,
     STATE_UNKNOWN,
 )
 from homeassistant.core import callback
@@ -71,7 +72,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 def format_receive_value(value):
     """format if pb then return None"""
-    if value == None or value == STATE_UNKNOWN:
+    if value == None or value == STATE_UNKNOWN or value == STATE_UNAVAILABLE:
         return None
     else:
         return float(value)
@@ -79,7 +80,7 @@ def format_receive_value(value):
 
 def format_receive_value_zero(value):
     """format if pb then return 0.0"""
-    if value == None or value == STATE_UNKNOWN:
+    if value == None or value == STATE_UNKNOWN or value == STATE_UNAVAILABLE:
         return float(0.0)
     else:
         return float(value)
