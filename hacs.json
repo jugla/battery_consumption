@@ -1,5 +1,4 @@
 {
   "name": "battery_consumption",
-  "domains": ["sensor"],
-  "iot_class": "calculated"
+  "homeassistant" : "2021.12.0"
 }
