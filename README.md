@@ -108,14 +108,14 @@ template:
         state: "{{ state_attr('sensor.battery_consumption_sensor_battery_level', 'total_energy_charge') }}"
         unit_of_measurement: 'kWh'
         device_class: energy
-        state_class: measurement
+        state_class: total
 
   - sensor:
       - name: zoe_batterie_total_discharge
         state: "{{ state_attr('sensor.battery_consumption_sensor_battery_level', 'total_energy_discharge') }}"
         unit_of_measurement: 'kWh'
         device_class: energy
-        state_class: measurement
+        state_class: total
 
 ## UTILITY METER
 utility_meter:
