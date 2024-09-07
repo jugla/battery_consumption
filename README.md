@@ -95,6 +95,7 @@ The sensor is created with the following attribute :
 | Total discharge | V1.0.0 |  always | % | the sum of all *battery discharge* since the beginning |
 | Capacity unit | V1.0.0 |  if capacity given | kWh , Wh, ... | the unif of the capacity of the battery cf. yaml |
 | Capacity | V1.0.0 |  if capacity given  | kWh , Wh, ...  | the capacity of the battery cf. yaml |
+| Energy level | V2.0.0 |  if capacity given | kWh , Wh, ... | the Energy value respect to battery level (current state) |
 | Energy Variation | V2.0.0 |  if capacity given | kWh , Wh, ... | the difference between current and previous Energy value |
 | Energy charge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *battery charge* converted in energy |
 | Energy discharge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *battery discharge* converted in energy |
