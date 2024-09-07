@@ -27,12 +27,16 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+# attributes
+# indicate the source for battery
 ATTR_SOURCE = "source"
 ATTR_SOURCE_ATTRIBUTE = "source_attribute"
+# different attributes in % (battery level)
 ATTR_PREVIOUS_MONITORED_VALUE = "previous_value"
 ATTR_CURRENT_VARIATION = "variation"
 ATTR_CURRENT_CHARGE = "battery_charge"
 ATTR_CURRENT_DISCHARGE = "battery_discharge"
+# different attributes in Wh (energy)
 ATTR_CURRENT_VARIATION_ENERGY = "energy_variation"
 ATTR_CURRENT_CHARGE_ENERGY = "energy_charge"
 ATTR_CURRENT_DISCHARGE_ENERGY = "energy_discharge"
@@ -42,9 +46,12 @@ ATTR_TOTAL_CHARGE_ENERGY = "total_energy_charge"
 ATTR_TOTAL_DISCHARGE_ENERGY = "total_energy_discharge"
 ATTR_CAPACITY_UNIT = "capacity_unit"
 ATTR_CAPACITY = "capacity"
+ATTR_ENERGY_LEVEL = "energy_level"
+# different attributes in time
 ATTR_LAST_UPDATED = "last_updated"
 ATTR_PREVIOUS_LAST_UPDATED = "previous_last_updated"
 ATTR_DELTA_LAST_UPDATED = "delta_last_updated_in_minutes"
+# different attributes in W (power)
 ATTR_CURRENT_POWER = "instant_power"
 
 
@@ -231,6 +238,10 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
         if self._battery_capacity != None:
             ret[ATTR_CAPACITY_UNIT] = self._unit_of_measurement
             ret[ATTR_CAPACITY] = self._battery_capacity
+
+            ret[ATTR_ENERGY_LEVEL] = (
+                self._state * self._battery_capacity / 100
+            )
 
             ret[ATTR_CURRENT_VARIATION_ENERGY] = (
                 self._delta * self._battery_capacity / 100
