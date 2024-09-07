@@ -85,17 +85,22 @@ The sensor is created with the following attribute :
 | ---------------|---------|-------|------|------------------------------------|
 | Source | V1.0.0 | always | string | the name of battery to monitor | 
 | Previous value | V1.0.0 |  always | % | the previous value of battery to monitor |
+| Last updated | V2.0.0 |  always | time and date | the time when battery consumption has been updated |
+| Previous last updated | V2.0.0 |  always | time and date | the time when previous value has been updated |
+| Delta last updated in minutes | V2.0.0 |  always | mn | delta time between current and previous value |
 | Variation | V1.0.0 |  always | % | the difference between current and previous value |
 | Battery charge | V1.0.0 |  always | % | the difference between current and previous value if positive (battery is charging) |
 | Battery discharge | V1.0.0 |  always | % | the difference between current and previous value if negative (battery is discharging) |
 | Total charge | V1.0.0 |  always | % | the sum of all *battery charge* since the beginning | 
 | Total discharge | V1.0.0 |  always | % | the sum of all *battery discharge* since the beginning |
-| Capacity | V1.0.0 |  if capacity given  | kWh , Wh, ...  | the capacity of the battery cf. yaml |
 | Capacity unit | V1.0.0 |  if capacity given | kWh , Wh, ... | the unif of the capacity of the battery cf. yaml |
+| Capacity | V1.0.0 |  if capacity given  | kWh , Wh, ...  | the capacity of the battery cf. yaml |
+| Energy Variation | V2.0.0 |  if capacity given | kWh , Wh, ... | the difference between current and previous Energy value |
 | Energy charge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *battery charge* converted in energy |
 | Energy discharge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *battery discharge* converted in energy |
 | Total energy charge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *total battery charge* converted in energy |
 | Total energy discharge | V1.0.0 |  if capacity given | kWh , Wh, ... | the *total battery discharge* converted in energy |
+| Instant power | V2.0.0 |  if capacity given | kW , W, ... | the power corresponding to energy variation during delta time between update |
 
 ## Typical use
 Typical use is to follow the consumption of battery thanks to utility meter
