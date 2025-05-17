@@ -266,13 +266,15 @@ class BatteryConsumptionSensor(RestoreEntity, SensorEntity):
 
 
             try:
-                # delta in % --> convert in Wh/kWh/MWh , 
+                # delta in % --> convert in Wh/kWh/MWh ,
                 # delta_last_updated in second --> convert into h
-                ret[ATTR_CURRENT_POWER] = (
+                ret[ATTR_CURRENT_POWER] = round(
+                (
                     ( self._delta * self._battery_capacity / 100 )
                     /
                     ( self._delta_last_updated / 3600 )
                 )
+                ,2)
             except:
                 # manage divide by 0
                 ret[ATTR_CURRENT_POWER] = 0.0
